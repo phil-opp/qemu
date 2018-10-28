@@ -60,6 +60,7 @@ void vm_start(void);
 int vm_prepare_start(void);
 int vm_stop(RunState state);
 int vm_stop_force_state(RunState state);
+void vm_stop_from_timer(RunState state);
 int vm_shutdown(void);
 
 typedef enum WakeupReason {

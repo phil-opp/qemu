@@ -93,4 +93,5 @@
 { 'include': 'transaction.json' }
 { 'include': 'trace.json' }
 { 'include': 'introspect.json' }
+{ 'include': 'injection.json' }
 { 'include': 'misc.json' }
