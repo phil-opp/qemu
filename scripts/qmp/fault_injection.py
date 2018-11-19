@@ -117,7 +117,7 @@ class FaultInjectionFramework(qmp.QEMUMonitorProtocol):
                                         'addr': address,
                                         'val': value,
                                         'qom': cpu}}
-        self.send(qmpcmd)
+        return self.send(qmpcmd)
 
     def read(self, address, size, cpu):
         # Read a value
