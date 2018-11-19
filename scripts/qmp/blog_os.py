@@ -11,7 +11,8 @@ def main():
     global inj
     inj = fault_injection.FaultInjectionFramework(sys.argv[1], 0)
 
-    inj.notify(1 * 1000 * 1000 * 1000, corrupt_random_bit)
+    # inj.notify(1 * 1000 * 1000 * 1000, corrupt_random_bit)
+    inj.notify(1 * 1000 * 1000 * 1000, test)
 
     inj.run()
 
@@ -29,12 +30,25 @@ def corrupt_random_bit():
     if byte & (1 << bit_number) == 0:
         byte |= (1 << bit_number)
     else:
-        byte &= not (1 << bit_number)
+        byte &= ~(1 << bit_number)
 
     #print ("corrupted value: " + hex(byte))
     inj.write(byte_number, byte, 1, 0)
 
-    inj.notify(1 * 1000 * 1000, corrupt_random_bit) # every millisecond
+    inj.notify(100 * 1000 * 1000, corrupt_random_bit) # every millisecond
+
+def test():
+    phys = virt_to_phys(0xb8100)
+    current = inj.read(phys, 8, 0)["value"]
+    print hex(current)
+    print inj.write(phys, 0xfffffffffffffff, 8, 0)
+    current = inj.read(phys, 8, 0)["value"]
+    print hex(current)
+
+    phys = virt_to_phys(0x2094e0)
+    current = inj.read(phys, 1, 0)["value"]
+    print inj.write(phys, 0xcccc, 2, 0) # 2 times int3 opcode
+    print hex(current)
 
 def virt_to_phys(addr):
     # Translate a virtual to a physical address
