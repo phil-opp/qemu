@@ -45,7 +45,22 @@ def virt_to_phys(addr):
     page_offset = addr & 0xfff;
 
     p4_addr = 0x1000;
-    print hex(inj.read(p4_addr, 8, 0)["value"])
+
+    p4_entry = inj.read(p4_addr + p4_index * 8, 8, 0)["value"]
+    p3_addr = p4_entry & (~0xfff)
+
+    p3_entry = inj.read(p3_addr + p3_index * 8, 8, 0)["value"]
+    p2_addr = p3_entry & (~0xfff)
+
+    p2_entry = inj.read(p2_addr + p2_index * 8, 8, 0)["value"]
+    p1_addr = p2_entry & (~0xfff)
+
+    p1_entry = inj.read(p1_addr + p1_index * 8, 8, 0)["value"]
+    phys_page_addr = p1_entry & (~0xfff)
+
+    phys_addr = phys_page_addr + page_offset
+
+    return phys_addr
 
 if __name__ == '__main__':
     main()
