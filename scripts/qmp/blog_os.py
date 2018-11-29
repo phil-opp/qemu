@@ -58,7 +58,7 @@ def virt_to_phys(addr):
     p1_index = (addr >> 12) & 0x1ff;
     page_offset = addr & 0xfff;
 
-    p4_addr = 0x1000;
+    p4_addr = inj.read_cr3(0)["value"];
 
     p4_entry = inj.read(p4_addr + p4_index * 8, 8, 0)["value"]
     p3_addr = p4_entry & (~0xfff)
