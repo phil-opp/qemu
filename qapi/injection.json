@@ -59,6 +59,25 @@
            '*qom': 'str'} }
 
 ##
+# @read_cr3:
+#
+# Read a memory location from a CPU point of view. The @qom name of the CPU is
+# used if provided. The @cpu id is used if no @qom name are provided.
+# If both the @qom name or @cpu id are not provided the access is done from cpu
+# 0.
+#
+# @cpu: The optional index of the CPU doing the access.
+# @qom: The optional qom name of the CPU doing the access.
+#
+# Returns: ReadValue, a strucutre with the value read
+#
+# Since 2.6
+##
+{ 'command': 'read_cr3',
+    'data': {'*cpu': 'int', '*qom': 'str'},
+    'returns': 'ReadValue'}
+
+##
 # @trigger_event:
 #
 # Trigger an event

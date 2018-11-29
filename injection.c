@@ -116,6 +116,42 @@ ReadValue *qmp_read_mem(int64_t addr, int64_t size, bool has_cpu, int64_t cpu,
     }
 }
 
+ReadValue *qmp_read_cr3(bool has_cpu, int64_t cpu_number,
+                     bool has_qom, const char *qom, Error **errp)
+{
+    ReadValue *ret = g_new0(ReadValue, 1);
+    int cpu_id = 0;
+    Object *obj;
+    CPUState *s;
+
+    ret->value = 0;
+
+    if (has_qom) {
+        obj = object_resolve_path(qom, NULL);
+        s = (CPUState *)object_dynamic_cast(obj, TYPE_CPU);
+        if (s) {
+            cpu_id = s->cpu_index;
+            DPRINTF("read cr3 cpu_path=%s (cpu=%d)\n", qom, cpu_id);
+        } else {
+            error_set(errp, ERROR_CLASS_DEVICE_NOT_FOUND,
+                            "'%s' is not a CPU or doesn't exists", qom);
+            DPRINTF("read memory failed.\n");
+            return ret;
+        }
+    } else {
+        if (has_cpu) {
+            cpu_id = cpu_number;
+        }
+        DPRINTF("read cr3 (cpu=%d)\n", cpu_id);
+    }
+
+    X86CPU *cpu = X86_CPU(qemu_get_cpu(cpu_id));
+    CPUX86State *env = &cpu->env;
+    ret->value = env->cr[3];
+
+    return ret;
+}
+
 struct FaultEventEntry {
     uint64_t time_ns;
     int64_t val;

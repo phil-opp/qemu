@@ -136,6 +136,18 @@ class FaultInjectionFramework(qmp.QEMUMonitorProtocol):
         value = self.send(qmpcmd)['return']
         return value
 
+    def read_cr3(self, cpu):
+        # Read a value
+        self.time_print('read cr3 from cpu %s' %(cpu))
+        if type(cpu) is int:
+            qmpcmd = {'execute': 'read_cr3',
+                      'arguments': {'cpu': cpu}}
+        else:
+            qmpcmd = {'execute': 'read_cr3',
+                      'arguments': {'qom': cpu}}
+        value = self.send(qmpcmd)['return']
+        return value
+
     def get_qom_property(self, path, property):
         # Get a QOM property
         qmpcmd = {'execute': 'qom-get',
