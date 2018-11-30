@@ -35,7 +35,7 @@ def corrupt_random_heap_bit():
     #print ("corrupted value: " + hex(byte))
     inj.write(byte_number, byte, 1, 0)
 
-    inj.notify(1 * 1000 * 1000 * 1000, corrupt_random_heap_bit) # every second
+    inj.notify(100 * 1000 * 1000, corrupt_random_heap_bit)
 
 def virt_to_phys(addr):
     # Translate a virtual to a physical address
