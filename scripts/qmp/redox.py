@@ -12,10 +12,15 @@ def main():
     inj = fault_injection.FaultInjectionFramework(sys.argv[1], 0)
 
     inj.notify(1 * 1000 * 1000 * 1000, corrupt_random_heap_bit)
+    inj.notify(10 * 1000 * 1000 * 1000, system_reset)
 
     inj.run()
 
     sys.exit(1)
+
+def system_reset():
+    qmpcmd = {'execute': 'system_reset'}
+    print(inj.send(qmpcmd))
 
 def corrupt_random_heap_bit():
     #print 'corrupt_random_heap_bit()'
